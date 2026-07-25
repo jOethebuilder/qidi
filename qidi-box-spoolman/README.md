@@ -190,4 +190,42 @@ Pattern:
 - Tools `T4..T7` map via `value_t4..value_t7`
 
 ---
+## Dual-Box (Plus4) Notes
 
+This was originally built and tested for a single Box on a Q2. If you're 
+running two QIDI Boxes on a Plus4 (or any dual-box setup), be aware of 
+the following differences:
+
+### 1. Tools are NOT fixed to a specific box
+QIDI dynamically maps any tool number (T0-T7) to any physical slot across 
+BOTH boxes, based on what's loaded and the sync step when you send a print. 
+Do not assume T0-T3 = Box1 and T4-T7 = Box2 — check `value_t0`..`value_t7` 
+in `saved_variables.cfg` to see the live mapping at any given time.
+
+Because of this, **every T0-T7 macro in both spoolman_qidi_box1.cfg and 
+spoolman_qidi_box2.cfg must check all 8 possible slots** (slot0-7), not 
+just their "own" 4. The versions in this repo have been updated accordingly.
+
+### 2. Active Spool doesn't auto-populate at print start by default
+QIDI's own `PRINT_START` macro calls `BOX_PRINT_START` directly (its 
+internal load routine), which bypasses our T0-T7 overrides entirely. This 
+means Spoolman's Active Spool stays blank until a tool *change* happens 
+mid-print — the very first tool of a print never triggers it.
+
+**Fix:** add the `ACTIVATE_SPOOL_FOR_TOOL` macro (included at the end of 
+`spoolman_qidi_box1.cfg`) — it sets the active spool without touching the 
+physical loader, so it's safe to call before printing starts. Then, in 
+your slicer's **Start G-code**, add this line before the `PRINT_START` line:
+
+    ACTIVATE_SPOOL_FOR_TOOL T=[initial_tool]
+
+This ensures Spoolman knows the correct spool *before* the initial 
+purge/flush happens, so that filament usage is correctly counted too.
+
+### 3. Unloading via Fluidd's Box Control panel does not clear Active Spool
+Neither `M603` nor QIDI's `UNLOAD_FILAMENT`/`UNLOAD_Tn` macros call 
+`CLEAR_ACTIVE_SPOOL`. This means Active Spool can show a stale spool_id 
+after an unload — but it self-corrects the moment the next print's tool 
+change fires. If you want it to clear immediately on unload instead, add 
+`CLEAR_ACTIVE_SPOOL` to the relevant macro in `box.cfg` (vendor file, not 
+covered by this repo).
