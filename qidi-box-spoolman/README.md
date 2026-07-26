@@ -100,15 +100,16 @@ Community testing and feedback are welcome.
 
 # Requirements
 
-Before installing:
+## Spoolman Requirements
 
-- QIDI printer running Klipper
-- QIDI Box hardware
-- Moonraker installed
-- Spoolman installed
-- Fluidd access
-- Ability to edit configuration files
+Spoolman must be enabled in `moonraker.cfg`.
 
+Your `moonraker.cfg` should contain:
+
+```ini
+[spoolman]
+server: http://localhost:7912
+if not add this at the end
 ---
 
 # Installation
