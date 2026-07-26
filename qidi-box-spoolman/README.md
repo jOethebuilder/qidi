@@ -1,6 +1,5 @@
-# QIDI Box + Spoolman Integration
-## QIDI Plus 4 / Dual QIDI Box Community Fork
-
+# QIDI Box + Spoolman Plus 4 Edition
+## Community Fork with Dual QIDI Box Support
 A community-maintained fork of the original **QIDI Box + Spoolman integration project** by **Ivantify**.
 
 This fork expands the original project by adding support for the **QIDI Plus 4** and enabling operation with **dual QIDI Boxes** for expanded filament management.
