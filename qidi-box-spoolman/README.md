@@ -30,7 +30,7 @@ https://github.com/Ivantify/qidi/tree/main/qidi-box-spoolman
 
 Forked from:
 
-https://github.com/Ivantify/qidi/tree/main/qidi-box-spoolman
+https://github.com/jOethebuilder/qidi/tree/main/qidi-box-spoolman
 
 ---
 
